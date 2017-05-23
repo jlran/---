@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+    <constant name="struts.devMode" value="false" />
+
+	<package name="default" extends="struts-default" namespace="/">
+		<default-action-ref name="index"></default-action-ref>
+		<action name="index" class="indexAction" method="index">
+			<result name="none">index.jsp</result>
+		</action>
+		
+		<!-- 用户 -->
+		<action name="user_*" class="userAction" method="{1}">
+			<result name="registPageSuccess">/WEB-INF/back/zc.jsp</result>
+			<result name="loginPageSuccess">/WEB-INF/back/login.jsp</result>
+			<result name="registInput">/WEB-INF/back/zc.jsp</result>
+			<result name="registSuccess">/WEB-INF/back/login.jsp</result>
+			<result name="loginInput">/WEB-INF/back/login.jsp</result>
+			<result name="loginSuccess" type="redirectAction">index</result>
+			<result name="quit" type="redirectAction">index</result>
+			<result name="admin">/WEB-INF/back/admin/admin.jsp</result>
+			<result name="vip">/WEB-INF/back/vip/vip.jsp</result>
+			<result name="showAll">/public/showall.jsp</result>
+			<result name="updateSuccess">/public/success.html</result>
+			<result name="updateInput">/public/backshow.html</result>
+			<result name="manvipSuccess">/public/manVip.jsp</result>
+		</action>
+		
+		<!-- 文章 -->
+		<action name="arcitle_*" class="acitleAction"  method="{1}">
+			<result name="newPublicSuccess">/WEB-INF/back/public/public.jsp</result>
+			<result name="Input" type="redirectAction">index</result>
+			<result name="addSuccess" type="redirectAction">index</result>
+			<result name="showSuccess">/app/detail.jsp</result>
+			<result name="showInpu" type="redirectAction">index</result>
+			<result name="it">/app/blog.jsp</result>
+			<result name="other">/app/blog.jsp</result>
+			<result name="peronsuccess">/public/showUser.jsp</result>
+			<result name="showPersonSuccess">/public/manarticle.jsp</result>
+		</action>
+		
+		<!-- 消息 -->
+		<action name="news_*" class="newsAction" method="{1}">
+			<result name="addNewsSuccess">/public/backshow.html</result>
+			<result name="Input" type="redirectAction">index</result>
+			<result name="showSuccess">/app/detail.jsp</result>
+			<result name="showInpu" type="redirectAction">index</result>
+		</action>
+		
+		<!-- 工具添加 -->
+		<action name="tools_*" class="toolsAction" method="{1}">
+			<result name="addToolsSuccess">/public/backshow.html</result>
+			<result name="Input">/public/publicTool.jsp</result>
+			<result name="showSuccess">/app/detail.jsp</result>
+			<result name="showInpu" type="redirectAction">index</result>
+			<result name="showallSuccess">/public/showtools.jsp</result>
+			<result name="showPersonSuccess">/public/mantools.jsp</result>
+		</action>
+		
+		<!-- Video接口 -->
+		<action name="video_*" class="videoAction" method="{1}">
+			<result name="showSuccess">/app/video.jsp</result>
+			<result name="updateSuccess">/public/backshow.html</result>
+		</action>
+		
+		<!-- 简历 -->
+		<action name="jianli_*" class="jianliAction" method="{1}">
+			<result name="showSuccess">/app/joran.jsp</result>
+			<result name="update" type="redirectAction">index</result>
+			<result name="updatejianli">/WEB-INF/back/public/jianli.jsp</result>
+		</action>
+		<!-- 验证码 -->
+		<action name="CheckImg" class="com.github.jlran.user.CheckImgAction"></action>
+		
+		<!-- 聊天 -->
+		<action name="chart_*" class="chartAction" method="{1}">
+			<result name="creatSuccess" type="redirect">wechart/wechart.jsp</result>
+			<result name="creatInput">wechart/index.jsp</result>
+			<result name="sendSuccess">wechart/wechart.jsp</result>
+			<result name="loginSuccess">wechart/wechart.jsp</result>
+			<result name="loginInput">wechart/index.jsp</result>
+		</action>
+		
+		<action name="face_*" class="faceAction" method="{1}">
+			<result name="loginPageSuccess">/app/face.jsp</result>
+		</action>
+	</package>
+</struts>

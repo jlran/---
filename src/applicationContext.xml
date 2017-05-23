@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx.xsd">
+	
+	
+	<!-- 没有hibernate的配置文件 -->
+	<!-- 配置连接池  需要引入jdbc.properties-->
+	<!-- 引入外部属性文件 -->
+	<context:property-placeholder location="classpath:jdbc.properties"/>
+	
+	<!-- 配置c3p0连接池 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${jdbc.driver}"></property>
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="user" value="${jdbc.user}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="initialPoolSize" value="${jdbc.initialPoolSize}" />
+		<property name="maxPoolSize"  value="${jdbc.maxPoolSize}"/>
+	</bean>
+	
+	<!-- 配置hibernate3 -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<!-- 管理连接池 -->
+		<property name="dataSource" ref="dataSource" />
+		<!-- 配置hibernate的属性 -->
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.connection.autocommit">false</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+		
+		<property name="mappingResources">
+			<list>
+				<value>com/github/jlran/vo/User.hbm.xml</value>
+				<value>com/github/jlran/vo/Arcitle.hbm.xml</value>
+				<value>com/github/jlran/vo/News.hbm.xml</value>
+				<value>com/github/jlran/vo/Tools.hbm.xml</value>
+				<value>com/github/jlran/vo/Video.hbm.xml</value>
+				<value>com/github/jlran/vo/Jianli.hbm.xml</value>
+				<value>com/github/jlran/vo/Face.hbm.xml</value>
+				<value>com/github/jlran/wechart/vo/Chartnews.hbm.xml</value>
+				<value>com/github/jlran/wechart/vo/Charttable.hbm.xml</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 管理事务 -->
+	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<!-- 注解开启事务   然后需要在service上添加 @T....-->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+	<!-- 配置action -->
+	<bean id="userAction" class="com.github.jlran.user.UserAction" scope="prototype">
+		<property name="userService" ref="userService"></property>
+	</bean>
+	<bean id="acitleAction" class="com.github.jlran.arcitle.AcitleAction" scope="prototype">
+		<property name="arcitleService" ref="articleService"></property>
+		<property name="userService" ref="userService"></property>
+	</bean>
+	<bean id="newsAction" class="com.github.jlran.news.NewsAction" scope="prototype">
+		<property name="newsService" ref="newsService"></property>
+	</bean>
+	<bean id="toolsAction" class="com.github.jlran.tools.ToolsAction" scope="prototype">
+		<property name="toolsService" ref="toolsService"></property>
+		<property name="userService" ref="userService"></property>
+	</bean>
+	<bean id="indexAction" class="com.github.jlran.index.IndexAction" scope="prototype">
+		<property name="arcitleService" ref="articleService"></property>
+		<property name="toolsService" ref="toolsService"></property>
+		<property name="newsService" ref="newsService"></property>
+	</bean>
+	<bean id="videoAction" class="com.github.jlran.video.VideoAction" scope="prototype">
+		<property name="videoService" ref="videoService"></property>
+	</bean>
+	<bean id="jianliAction" class="com.github.jlran.jianli.JianliAction" scope="prototype">
+		<property name="jianliService" ref="jianliService"></property>
+	</bean>
+	<bean id="chartAction" class="com.github.jlran.wechart.ChartAction" scope="prototype">
+		<property name="chartService" ref="chartService"></property>
+	</bean>
+	<bean id="faceAction" class="com.github.jlran.face.FaceAction" scope="prototype">
+		<property name="faceService" ref="faceService"></property>
+		<property name="userService" ref="userService"></property>
+	</bean>
+	
+	<!-- 配置service -->
+	<bean id="userService" class="com.github.jlran.user.UserService">
+		<property name="userDao" ref="userDao"></property>
+	</bean>
+	<bean id="articleService" class="com.github.jlran.arcitle.ArcitleService">
+		<property name="arcitleDao" ref="arcitleDao"></property>
+	</bean>
+	<bean id="newsService" class="com.github.jlran.news.NewsService">
+		<property name="newsDao" ref="newsDao"></property>
+	</bean>
+	<bean id="toolsService" class="com.github.jlran.tools.ToolsService">
+		<property name="toolsDao" ref="toolsDao"></property>
+	</bean>
+	<bean id="videoService" class="com.github.jlran.video.VideoService">
+		<property name="videoDao" ref="videoDao"></property>
+	</bean>
+	<bean id="jianliService" class="com.github.jlran.jianli.JianliService">
+		<property name="jianliDao" ref="jianliDao"></property>
+	</bean>
+	<bean id="chartService" class="com.github.jlran.wechart.ChartService">
+		<property name="chartDao" ref="chartDao"></property>
+	</bean>
+	<bean id="faceService" class="com.github.jlran.face.FaceService">
+		<property name="faceDao" ref="faceDao"></property>
+	</bean>
+	
+	<!-- 配置dao -->
+	<bean id="userDao" class="com.github.jlran.user.UserDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="arcitleDao" class="com.github.jlran.arcitle.ArcitleDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="newsDao" class="com.github.jlran.news.NewsDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="toolsDao" class="com.github.jlran.tools.ToolsDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="videoDao" class="com.github.jlran.video.VideoDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="jianliDao" class="com.github.jlran.jianli.JianliDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="chartDao" class="com.github.jlran.wechart.ChartDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="faceDao" class="com.github.jlran.face.FaceDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+</beans>

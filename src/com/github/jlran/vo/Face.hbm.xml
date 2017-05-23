@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.github.jlran.vo.Face" table="face">
+		<id name="id" column="id">
+			<generator class="native" />
+		</id>
+		<property name="uuid" column="uuid" />
+		<property name="face1" column="face1"  />
+		<property name="face2" column="face2"/>
+		<property name="face3" column="face3" />
+	</class>
+</hibernate-mapping>
